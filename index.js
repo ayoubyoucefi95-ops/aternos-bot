@@ -1,35 +1,39 @@
 const mineflayer = require('mineflayer');
 
 function createBot() {
+    console.log("محاولة الاتصال بالسيرفر...");
+    
     const bot = mineflayer.createBot({
-        host: 'gurnard.aternos.host', // الـ الـدينا‌ميكي الخاص بسيرفرك
-        port: 11025,                  // البورت الصحيح
-        version: false,               // اكتشاف النسخة أوتوماتيكياً
-        username: 'player_X'          // اسم البوت الطبيعي 100%
+        host: 'gurnard.aternos.host',
+        port: 11025,
+        version: false,
+        username: 'player_X',
+        hideErrors: false
     });
 
     bot.on('spawn', () => {
-        console.log("==> البوت 'player_X' دخل بنجاح واستقر في السيرفر!");
+        console.log("==> البوت دخل بنجاح واستقر في السيرفر!");
         
-        // حركة القفز كل دقيقتين لمنع طرده بسبب الخمول (AFK Timeout)
-        setInterval(() => {
-            bot.setControlState('jump', true);
-            setTimeout(() => bot.setControlState('jump', false), 1000);
-        }, 120000);
+        // الانتظار لمدة 5 ثواني بعد الدخول قبل البدء بأي حركة لتجنب الطرد السريع
+        setTimeout(() => {
+            setInterval(() => {
+                bot.setControlState('jump', true);
+                setTimeout(() => bot.setControlState('jump', false), 1000);
+            }, 120000);
+        }, 5000);
     });
 
-    // التقاط سبب الطرد بدقة لمعرفته في الـ Logs
     bot.on('kicked', (reason) => {
-        console.log(`==> تم طرد البوت من السيرفر. السبب: ${reason}`);
+        console.log(`==> تم طرد البوت. السبب: ${reason}`);
     });
 
     bot.on('end', (reason) => {
-        console.log(`==> انقطع اتصال البوت. السبب: ${reason}. إعادة المحاولة بعد 15 ثانية...`);
-        setTimeout(createBot, 15000); // زيادة الوقت قليلاً لضمان استقرار السيرفر
+        console.log(`==> انقطع الاتصال (${reason}). إعادة المحاولة خلال 10 ثواني...`);
+        setTimeout(createBot, 10000);
     });
 
     bot.on('error', (err) => {
-        console.log('==> حدث خطأ في اتصال البوت:', err);
+        console.log('==> خطأ في الاتصال:', err.code || err.message);
     });
 }
 
