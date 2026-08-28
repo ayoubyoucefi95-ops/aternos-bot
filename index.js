@@ -5,7 +5,7 @@ function createBot() {
         host: 'AYOUB_andda7man.aternos.me',
         port: 11025,
         version: false,
-        username: 'AfnBot_24h'
+        username: 'player_X'
     });
 
     bot.on('spawn', () => {
