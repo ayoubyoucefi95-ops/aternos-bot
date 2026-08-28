@@ -11,23 +11,23 @@ function createBot() {
     bot.once('spawn', () => {
         console.log('البوت دخل بنجاح واستقر في السيرفر 🎉');
 
-        // حركة تفاعلية كل 30 ثانية (قفزة + دوران خفيف للرأس باش ما يطردوش السيرفر)
+        // حركة تفاعلية كل 15 ثانية (قفزة + تلفت سريع) باش ما يطردوش السيرفر
         setInterval(() => {
             // القفز
             bot.setControlState('jump', true);
-            setTimeout(() => { bot.setControlState('jump', false); }, 1000);
+            setTimeout(() => { bot.setControlState('jump', false); }, 500);
 
-            // دوران عشوائي خفيف للرأس
-            const yaw = bot.entity.yaw + 1.5;
+            // دوران الرأس
+            const yaw = bot.entity.yaw + 2;
             const pitch = (Math.random() - 0.5) * 0.5;
             bot.look(yaw, pitch, true);
 
-        }, 30000);
+        }, 15000);
     });
 
     bot.on('end', (reason) => {
-        console.log(`انقطع الاتصال البوت: ${reason}. إعادة المحاولة بعد 10 ثانية...`);
-        setTimeout(createBot, 10000);
+        console.log(`انقطع الاتصال البوت: ${reason}. إعادة المحاولة بعد 5 ثواني...`);
+        setTimeout(createBot, 5000);
     });
 
     bot.on('error', (err) => {
