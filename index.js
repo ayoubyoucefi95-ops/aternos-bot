@@ -36,5 +36,3 @@ function createBot() {
 }
 
 createBot();
-
-createBot();
