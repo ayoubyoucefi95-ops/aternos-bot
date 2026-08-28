@@ -1,40 +1,40 @@
 const mineflayer = require('mineflayer');
 
 function createBot() {
-    console.log("محاولة الاتصال بالسيرفر...");
-    
     const bot = mineflayer.createBot({
-        host: 'gurnard.aternos.host',
+        host: 'AYOUB_andda7man.aternos.me',
         port: 11025,
         version: false,
-        username: 'player_X',
-        hideErrors: false
+        username: 'player_X'
     });
 
-    bot.on('spawn', () => {
-        console.log("==> البوت دخل بنجاح واستقر في السيرفر!");
-        
-        // الانتظار لمدة 5 ثواني بعد الدخول قبل البدء بأي حركة لتجنب الطرد السريع
-        setTimeout(() => {
-            setInterval(() => {
-                bot.setControlState('jump', true);
-                setTimeout(() => bot.setControlState('jump', false), 1000);
-            }, 120000);
-        }, 5000);
-    });
+    bot.once('spawn', () => {
+        console.log('البوت دخل بنجاح واستقر في السيرفر 🎉');
 
-    bot.on('kicked', (reason) => {
-        console.log(`==> تم طرد البوت. السبب: ${reason}`);
+        // حركة تفاعلية كل 30 ثانية (قفزة + دوران خفيف للرأس باش ما يطردوش السيرفر)
+        setInterval(() => {
+            // القفز
+            bot.setControlState('jump', true);
+            setTimeout(() => { bot.setControlState('jump', false); }, 1000);
+
+            // دوران عشوائي خفيف للرأس
+            const yaw = bot.entity.yaw + 1.5;
+            const pitch = (Math.random() - 0.5) * 0.5;
+            bot.look(yaw, pitch, true);
+
+        }, 30000);
     });
 
     bot.on('end', (reason) => {
-        console.log(`==> انقطع الاتصال (${reason}). إعادة المحاولة خلال 10 ثواني...`);
+        console.log(`انقطع الاتصال البوت: ${reason}. إعادة المحاولة بعد 10 ثانية...`);
         setTimeout(createBot, 10000);
     });
 
     bot.on('error', (err) => {
-        console.log('==> خطأ في الاتصال:', err.code || err.message);
+        console.log('حدث خطأ:', err);
     });
 }
+
+createBot();
 
 createBot();
