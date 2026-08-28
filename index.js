@@ -11,17 +11,13 @@ function createBot() {
     bot.once('spawn', () => {
         console.log('البوت دخل بنجاح واستقر في السيرفر 🎉');
 
-        // حركة تفاعلية كل 15 ثانية (قفزة + تلفت سريع) باش ما يطردوش السيرفر
         setInterval(() => {
-            // القفز
             bot.setControlState('jump', true);
             setTimeout(() => { bot.setControlState('jump', false); }, 500);
 
-            // دوران الرأس
             const yaw = bot.entity.yaw + 2;
             const pitch = (Math.random() - 0.5) * 0.5;
             bot.look(yaw, pitch, true);
-
         }, 15000);
     });
 
